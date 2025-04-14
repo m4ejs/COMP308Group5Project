@@ -1,10 +1,5 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+  - main
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -13,55 +8,66 @@ variables:
   buildConfiguration: 'Release'
 
 stages:
-  
-# Stage 1: Build
-- stage: Build
-  jobs:
-  - job: Build
-    steps:
-    - checkout: self
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '18.x'
-    - script: |
-        npm install
-        npm run build
-      displayName: 'Build Application'
+  - stage: Build
+    displayName: 'Build Stage'
+    jobs:
+      - job: BuildJob
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js'
 
-# Stage 2: SonarQube Analysis
-- stage: SonarQube
-  jobs:
-  - job: SonarQube
-    steps:
-    - checkout: self
-    - task: SonarQubePrepare@5
-      inputs:
-        SonarQube: 'SonarCloud-Connect'
-        scannerMode: 'CLI'
-    - script: |
-        npm run test
-      displayName: 'Run Tests'
-    - task: SonarQubeAnalyze@5
-    - task: SonarQubePublish@5
+          - script: |
+              npm install
+              npm run build
+            displayName: 'Install Dependencies & Build App'
 
-# Stage 3: Unit Test + Code Coverage
-- stage: Test
-  jobs:
-  - job: Test
-    steps:
-    - script: |
-        npm run test -- --coverage
-      displayName: 'Run Unit Tests with Coverage'
+  - stage: SonarQubeAnalysis
+    displayName: 'SonarQube Code Analysis'
+    jobs:
+      - job: SonarJob
+        steps:
+          - task: SonarQubePrepare@5
+            inputs:
+              SonarQube: 'SonarQube-Connect'
+              scannerMode: 'CLI'
+              configMode: 'manual'
+              cliProjectKey: '3ce93dc752017522fa785cdaaf3b3882ba500d7d'
+              cliProjectName: 'COMP308Group5Project'
 
-# Stage 4: Artifact
-- stage: Artifact
-  jobs:
-  - job: Publish
-    steps:
-    - task: CopyFiles@2
-      inputs:
-        contents: '**'
-        targetFolder: '$(Build.ArtifactStagingDirectory)'
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          - task: SonarQubeAnalyze@5
+
+          - task: SonarQubePublish@5
+            inputs:
+              pollingTimeoutSec: '300'
+
+  - stage: Test
+    displayName: 'Run Tests & Generate Coverage'
+    jobs:
+      - job: TestJob
+        steps:
+          - script: |
+              npm install
+              npm test -- --coverage
+            displayName: 'Run Tests & Coverage'
+
+  - stage: Artifact
+    displayName: 'Publish Artifact'
+    jobs:
+      - job: ArtifactJob
+        steps:
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: 'dist'
+              ArtifactName: 'drop'
+
+  - stage: DeployDev
+    displayName: 'Deploy to Dev Environment'
+    jobs:
+      - job: DeployJob
+        steps:
+          - script: |
+              echo "Deploying to Dev Environment"
+              echo "App running at http://localhost:5000"
+            displayName: 'Deployment Simulation'
