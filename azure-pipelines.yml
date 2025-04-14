@@ -66,10 +66,22 @@ stages:
     jobs:
       - job: ArtifactJob
         steps:
+          # Create artifact staging directory
+          - script: |
+              mkdir $(Build.ArtifactStagingDirectory)/app
+              echo "Copying client build..."
+              cp -r $(Build.SourcesDirectory)/client/dist $(Build.ArtifactStagingDirectory)/app/client
+              echo "Copying server code..."
+              cp -r $(Build.SourcesDirectory)/server $(Build.ArtifactStagingDirectory)/app/server
+            displayName: 'Prepare Artifact'
+
+          # Publish artifact to Azure DevOps
           - task: PublishBuildArtifacts@1
             inputs:
-              PathtoPublish: 'dist'
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)/app'
               ArtifactName: 'drop'
+
+
 
   - stage: DeployDev
     displayName: 'Deploy to Dev Environment'
