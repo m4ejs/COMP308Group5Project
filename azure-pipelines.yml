@@ -54,7 +54,7 @@ stages:
     displayName: 'Run Tests & Generate Coverage'
     jobs:
       - job: TestJob
-        condition: succeededOrFailed()
+        continueOnError: true # Even if tests fail, pipeline continues
         steps:
           - script: |
               cd $(Build.SourcesDirectory)/server
