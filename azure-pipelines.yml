@@ -24,7 +24,7 @@ stages:
               npm install
               npm run build
             displayName: 'Build Client'
-            
+
           # Build Server (Node.js API)
           - script: |
               cd $(Build.SourcesDirectory)/server
@@ -56,7 +56,7 @@ stages:
       - job: TestJob
         steps:
           - script: |
-              npm install
+              cd $(Build.SourcesDirectory)/server
               npm test -- --coverage
             displayName: 'Run Tests & Coverage'
 
