@@ -30,7 +30,7 @@ stages:
         steps:
           - task: SonarQubePrepare@5
             inputs:
-              SonarQube: 'SonarQube-Connect'
+              SonarQube: 'Project_SonarCube'
               scannerMode: 'CLI'
               configMode: 'manual'
               cliProjectKey: '3ce93dc752017522fa785cdaaf3b3882ba500d7d'
