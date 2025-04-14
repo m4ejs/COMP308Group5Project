@@ -18,12 +18,19 @@ stages:
               versionSpec: '20.x'
             displayName: 'Install Node.js'
 
+          # Build Server (Node.js API)
           - script: |
-              cd $(Build.SourcesDirectory)
+              cd $(Build.SourcesDirectory)/server
+              npm install
+            displayName: 'Install Server Dependencies'
+          
+          # Build Client (React)
+          - script: |
+              cd $(Build.SourcesDirectory)/client
               npm install
               npm run build
-            displayName: 'Install Dependencies & Build App'
-
+            displayName: 'Build Client'
+          
   - stage: SonarQubeAnalysis
     displayName: 'SonarQube Code Analysis'
     jobs:
