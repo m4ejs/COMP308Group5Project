@@ -57,6 +57,7 @@ stages:
         steps:
           - script: |
               cd $(Build.SourcesDirectory)/server
+              npm install
               npm test -- --coverage
             displayName: 'Run Tests & Coverage'
 
