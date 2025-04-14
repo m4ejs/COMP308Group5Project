@@ -41,7 +41,7 @@ stages:
               SonarQube: 'Project_SonarCube'
               scannerMode: 'CLI'
               configMode: 'manual'
-              cliProjectKey: '3ce93dc752017522fa785cdaaf3b3882ba500d7d'
+              cliProjectKey: 'm4ejs_COMP308Group5Project'
               cliProjectName: 'COMP308Group5Project'
 
           - task: SonarQubeAnalyze@5
