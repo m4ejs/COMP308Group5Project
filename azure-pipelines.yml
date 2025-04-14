@@ -19,6 +19,7 @@ stages:
             displayName: 'Install Node.js'
 
           - script: |
+              cd $(Build.SourcesDirectory)
               npm install
               npm run build
             displayName: 'Install Dependencies & Build App'
