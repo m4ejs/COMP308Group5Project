@@ -119,5 +119,5 @@ stages:
         steps:
           - script: |
               echo Deploying to Production Environment...
-              echo App running at https://yourdomain.com
+              echo App running at https://mydomain.com
             displayName: 'Production Deployment'
