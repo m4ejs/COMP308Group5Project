@@ -28,7 +28,7 @@ stages:
           # Build Server (Node.js API)
           - script: |
               cd $(Build.SourcesDirectory)/server
-              npm install
+              npm install --legacy-peer-deps
             displayName: 'Install Server Dependencies'
           
   - stage: SonarQubeAnalysis
