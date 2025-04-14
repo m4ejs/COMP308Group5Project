@@ -54,7 +54,7 @@ stages:
     displayName: 'Run Tests & Generate Coverage'
     jobs:
       - job: TestJob
-        continueOnError: true
+        condition: succeededOrFailed()
         steps:
           - script: |
               cd $(Build.SourcesDirectory)/server
@@ -88,3 +88,36 @@ stages:
               echo "Deploying to Dev Environment"
               echo "App running at http://localhost:5000"
             displayName: 'Deployment Simulation'
+
+  # Deploy to QAT Stage (Mock)
+  - stage: DeployQAT
+    displayName: 'Deploy to QAT Environment'
+    jobs:
+      - job: DeployQATJob
+        steps:
+          - script: |
+              echo Deploying to QAT Environment...
+              echo App running at http://qat.local:5000
+            displayName: 'QAT Deployment'
+
+  # Deploy to Staging Stage (Mock)
+  - stage: DeployStaging
+    displayName: 'Deploy to Staging Environment'
+    jobs:
+      - job: DeployStagingJob
+        steps:
+          - script: |
+              echo Deploying to Staging Environment...
+              echo App running at http://staging.local:5000
+            displayName: 'Staging Deployment'
+
+  # Deploy to Production Stage (Mock)
+  - stage: DeployProd
+    displayName: 'Deploy to Production Environment'
+    jobs:
+      - job: DeployProdJob
+        steps:
+          - script: |
+              echo Deploying to Production Environment...
+              echo App running at https://yourdomain.com
+            displayName: 'Production Deployment'
