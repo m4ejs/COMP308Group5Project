@@ -7,6 +7,9 @@ pool:
 variables:
   buildConfiguration: 'Release'
 
+# ============================
+# Build Stage
+# ============================
 stages:
   - stage: Build
     displayName: 'Build Stage'
@@ -31,6 +34,9 @@ stages:
               npm install --legacy-peer-deps
             displayName: 'Install Server Dependencies'
           
+# ============================
+# SonarQube Code Analysis Results
+# ============================
   - stage: SonarQubeAnalysis
     displayName: 'SonarQube Code Analysis'
     jobs:
@@ -50,6 +56,9 @@ stages:
             inputs:
               pollingTimeoutSec: '300'
 
+# ============================
+# Unit Test Results & Code Coverage %
+# ============================
   - stage: Test
     displayName: 'Run Tests & Generate Coverage'
     jobs:
@@ -61,6 +70,9 @@ stages:
               npx jest --coverage
             displayName: 'Run Tests & Coverage'
 
+# ============================
+# Artifact Published (Downloadable)
+# ============================
   - stage: Artifact
     displayName: 'Publish Artifact'
     jobs:
@@ -79,6 +91,14 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\app'
               ArtifactName: 'drop'
 
+# ============================
+# Deliver Stage
+# ============================
+# Includes Deployments to Dev, QAT, Staging, and Production environments
+
+# ============================
+# Deploy to Dev Environment
+# ============================
   - stage: DeployDev
     displayName: 'Deploy to Dev Environment'
     jobs:
@@ -89,7 +109,9 @@ stages:
               echo "App running at http://localhost:5000"
             displayName: 'Deployment Simulation'
 
-  # Deploy to QAT Stage (Mock)
+# ============================
+# Deploy to QAT Environment
+# ============================
   - stage: DeployQAT
     displayName: 'Deploy to QAT Environment'
     jobs:
@@ -100,7 +122,9 @@ stages:
               echo App running at http://qat.local:5000
             displayName: 'QAT Deployment'
 
-  # Deploy to Staging Stage (Mock)
+# ============================
+# Deploy to Staging Environment
+# ============================
   - stage: DeployStaging
     displayName: 'Deploy to Staging Environment'
     jobs:
@@ -111,7 +135,9 @@ stages:
               echo App running at http://staging.local:5000
             displayName: 'Staging Deployment'
 
-  # Deploy to Production Stage (Mock)
+# ============================
+# Deploy to Production Environment
+# ============================
   - stage: DeployProd
     displayName: 'Deploy to Production Environment'
     jobs:
@@ -119,5 +145,5 @@ stages:
         steps:
           - script: |
               echo Deploying to Production Environment...
-              echo App running at https://mydomain.com
+              echo App running at https://mktestdomain.com
             displayName: 'Production Deployment'
