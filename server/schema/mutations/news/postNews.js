@@ -9,9 +9,12 @@ const postNews = {
     args: {
       title: { type: GraphQLString },
       content: { type: GraphQLString },
-      authorId: { type: GraphQLID }
+      authorId: { type: GraphQLID },
+      type: { type: GraphQLString }
     },
-    async resolve(_, { title, content, authorId }) {
+    async resolve(_, { title, content, authorId, type }) {
+      console.log("📥 Mutation input:", { title, content, authorId, type });
+
       let summary = "";
       try {
         summary = await summarizeText(content);
@@ -20,8 +23,14 @@ const postNews = {
         summary = "Summary unavailable due to AI error.";
       }
 
-      const news = new News({ title, content, summary, author: authorId });
-      return news.save();
+      try {
+        const news = new News({ title, content, summary, author: authorId, type }); // ✅ Fixed
+        const saved = await news.save();
+        return saved;
+      } catch (err) {
+        console.error("❌ Error saving news to MongoDB:", err.message);
+        throw new Error("Failed to save news post.");
+      }
     }
   }
 };

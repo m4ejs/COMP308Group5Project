@@ -29,7 +29,10 @@ const RootQuery = new GraphQLObjectType({
     },
     helpRequests: {
       type: new GraphQLList(HelpRequestType),
-      resolve: () => HelpRequest.find()
+      resolve: () =>
+        HelpRequest.find()
+          .populate('requester')
+          .populate('matchedVolunteer')
     },
     businesses: {
       type: new GraphQLList(BusinessType),

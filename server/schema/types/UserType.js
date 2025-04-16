@@ -3,7 +3,10 @@ import { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLList } from 'graphq
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
-    id: { type: GraphQLID },
+    id: {
+      type: GraphQLID,
+      resolve: (parent) => parent._id
+    },
     username: { type: GraphQLString },
     email: { type: GraphQLString },
     role: { type: GraphQLString },

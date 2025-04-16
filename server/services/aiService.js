@@ -1,30 +1,45 @@
-const axios = require("axios");
+import axios from "axios";
+import dotenv from "dotenv";
 
-const summarizeText = async (text) => {
-  const response = await axios.post(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
-    {
-      contents: [{ parts: [{ text }] }],
-    },
-    { headers: { "Content-Type": "application/json" } }
-  );
+dotenv.config();
 
-  return response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`;
+
+export const summarizeText = async (text) => {
+  try {
+    const response = await axios.post(
+      GEMINI_URL,
+      {
+        contents: [{ parts: [{ text }] }],
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    return response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  } catch (error) {
+    console.error("❌ summarizeText Gemini error:", error.response?.data || error.message);
+    throw new Error("Failed to summarize text.");
+  }
 };
 
-const analyzeSentiment = async (text) => {
-  const response = await axios.post(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
-    {
-      contents: [{ parts: [{ text: `Analyze the sentiment: ${text}` }] }],
-    },
-    { headers: { "Content-Type": "application/json" } }
-  );
+export const analyzeSentiment = async (text) => {
+  try {
+    const response = await axios.post(
+      GEMINI_URL,
+      {
+        contents: [{ parts: [{ text }] }],
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
-  return response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-};
-
-module.exports = {
-  summarizeText,
-  analyzeSentiment,
+    return response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  } catch (error) {
+    console.error("❌ analyzeSentiment Gemini error:", error.response?.data || error.message);
+    throw new Error("Failed to analyze sentiment.");
+  }
 };
