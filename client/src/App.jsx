@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
+import PostNews from './pages/PostNews';
+import AllNews from './pages/AllNews';
+import RequestHelp from './pages/RequestHelp';
+import AllHelpRequests from './pages/AllHelpRequests';
+import EmergencyAlerts from './pages/EmergencyAlerts';
+
+import AllEvents from './pages/AllEvents';
+import CreateEvent from './pages/CreateEvent';
+
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route
+        path="/dashboard"
+        element={<PrivateRoute><Dashboard /></PrivateRoute>}
+      />
+      <Route
+        path="/post-news"
+        element={<PrivateRoute><PostNews /></PrivateRoute>}
+      />
+      <Route
+        path="/news"
+        element={<PrivateRoute><AllNews /></PrivateRoute>}
+      />
+      <Route
+        path="/request-help"
+        element={<PrivateRoute><RequestHelp /></PrivateRoute>}
+      />
+      <Route
+        path="/help-requests"
+        element={<PrivateRoute><AllHelpRequests /></PrivateRoute>}
+      />
+      <Route
+        path="/alerts"
+        element={<PrivateRoute><EmergencyAlerts /></PrivateRoute>}
+      />
+
+      <Route
+        path="/events"
+        element={<PrivateRoute><AllEvents /></PrivateRoute>}
+      />
+      <Route
+        path="/create-event"
+        element={<PrivateRoute><CreateEvent /></PrivateRoute>}
+      />
+
+    </Routes>
+  );
 }
 
-export default App
+export default App;

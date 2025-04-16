@@ -25,8 +25,13 @@ app.get('/', (req, res) => {
 // GraphQL endpoint
 app.use('/graphql', graphqlHTTP({
   schema,
-  graphiql: true  // Enable GraphiQL UI
+  graphiql: true,
+  customFormatErrorFn: (err) => {
+    console.error("❌ GraphQL Error:", err.message, err.stack);
+    return err;
+  }
 }));
+
 
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
